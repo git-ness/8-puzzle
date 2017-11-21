@@ -27,18 +27,22 @@ public class Board {
     }
 
     public int hamming() {                  // number of blocks out of place
-        int hammingSum = 0;
+        int hammingCount = 0;
+        int correctValue = 0;
 
         for (int i = 0; i < intialBoardCopy.length; i++) {
             for (int j = 0; j < intialBoardCopy.length; j++) {
+                int rolColvalue = intialBoardCopy[i][j];
 
-                if (intialBoardCopy[i][j] != hammingSum) {
-                    hammingSum++;
+                correctValue++;
+                if (rolColvalue == correctValue && rolColvalue == 0) {
+                    continue;
                 }
+                hammingCount++;
             }
         }
 
-        return hammingSum;
+        return hammingCount;
     }
 
     public int manhattan() {                // sum of Manhattan distances between blocks and goal
@@ -64,9 +68,7 @@ public class Board {
             twinboard[0][1] = swapValue;
 
             return new Board(twinboard);
-        }
-
-        else {
+        } else {
             int swapValue = twinboard[1][0];
             twinboard[1][1] = twinboard[1][0];
             twinboard[1][1] = swapValue;
@@ -77,10 +79,16 @@ public class Board {
 
 
     public boolean equals(Object y) {       // does this board equal y?
-        if (y == this) {return true;}
-        if (!(y instanceof Board)) { return false;}
+        if (y == this) {
+            return true;
+        }
+        if (!(y instanceof Board)) {
+            return false;
+        }
         Board otherBoard = (Board) y;
-        if(!(Arrays.deepEquals(otherBoard.blocks, ((Board) y).blocks))) {return false;}
+        if (!(Arrays.deepEquals(otherBoard.blocks, ((Board) y).blocks))) {
+            return false;
+        }
         return true;
     }
 
@@ -114,10 +122,5 @@ public class Board {
             for (Board board : solver.solution())
                 StdOut.println(board);
         }
-
     }
-
 }
-
-
-
