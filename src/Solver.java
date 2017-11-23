@@ -1,6 +1,10 @@
 public class Solver {
+    private Board initial;
+    private Board boardCopy;
 
     public Solver(Board initial) {            // find a solution to the initial board (using the A* algorithm)
+        this.initial = initial;
+
 
     }
 

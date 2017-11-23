@@ -1,6 +1,7 @@
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdOut;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Board {
@@ -11,7 +12,7 @@ public class Board {
 
     public Board(int[][] blocks) {          // construct a board from an n-by-n array of blocks
         // (where blocks[i][j] = block in row i, column j)
-
+        this.intialBoardCopy = new int[blocks.length][blocks.length];
         this.blocks = blocks;
 
         // Deep copy of 2 dem array.
@@ -46,11 +47,23 @@ public class Board {
     }
 
     public int manhattan() {                // sum of Manhattan distances between blocks and goal
-        return 0;
+        int manhattanValue = 0;
+        for (int i = 0; i < intialBoardCopy.length; i++) {
+            for (int j = 0; j < intialBoardCopy.length; i++) {
+                int goal = 1; // 2
+
+                int blockValue = intialBoardCopy[i][j]; // blockValue = 3
+
+                if (blockValue != goal) { // 3 != 2
+                    manhattanValue += Math.abs(blockValue - goal); // 3 - 2
+                }
+            }
+        }
+        return manhattanValue;
     }
 
     public boolean isGoal() {               // is this board the goal board?
-        return false;
+        return hamming() == 0;
     }
 
     public Board twin() {                   // a board that is obtained by exchanging any pair of blocks
@@ -93,34 +106,40 @@ public class Board {
     }
 
     public Iterable<Board> neighbors() {    // all neighboring boards
+
+        ArrayList<Board> listOfBoards = new ArrayList<Board>();
+        listOfBoards.add(new Board(intialBoardCopy));
+
+
+
         return null;
     }
 
     public String toString() {              // string representation of this board (in the output format specified below)
-        return null;
+        int n = dimension();
+
+        StringBuilder str = new StringBuilder();
+        str.append(n + "\n");
+        for (int i = 0; i < n; i++) {
+            str.append(String.format("%2d ", intialBoardCopy));
+        }
+        str.append("\n");
+
+        return str.toString();
     }
 
     public static void main(String[] args) { // unit tests (not graded)
 
         // create initial board from file
-        In in = new In(args[0]);
-        int n = in.readInt();
-        int[][] blocks = new int[n][n];
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
-                blocks[i][j] = in.readInt();
-        Board initial = new Board(blocks);
 
-        // solve the puzzle
-        Solver solver = new Solver(initial);
+        int[][] realBoardComplete = {
 
-        // print solution to standard output
-        if (!solver.isSolvable())
-            StdOut.println("No solution possible");
-        else {
-            StdOut.println("Minimum number of moves = " + solver.moves());
-            for (Board board : solver.solution())
-                StdOut.println(board);
-        }
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 0}};
+
+        Board boardExample = new Board(realBoardComplete);
+
+
     }
 }
