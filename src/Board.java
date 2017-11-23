@@ -107,10 +107,10 @@ public class Board {
 
     public Iterable<Board> neighbors() {    // all neighboring boards
 
-        ArrayList<Board> listOfBoards = new ArrayList<Board>();
+        ArrayList<Board> listOfBoards = new ArrayList<>();
         listOfBoards.add(new Board(intialBoardCopy));
 
-
+//        if ()
 
         return null;
     }
