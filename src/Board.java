@@ -8,6 +8,7 @@ public class Board {
 
     private int[][] blocks;
     private int[][] intialBoardCopy;
+    private int[][] correctBoard;
     private int[][] twinboard;
 
     public Board(int[][] blocks) {          // construct a board from an n-by-n array of blocks
@@ -21,6 +22,14 @@ public class Board {
                 this.intialBoardCopy[i][j] = blocks[i][j];
             }
         }
+
+//        for (int e = 0; e < blocks.length; e++) {
+//            for (int f = 0; f < blocks.length; f++) {
+//                int correctValues = 1;
+//                correctBoard[e][f] = correctValues;
+//                correctValues++;
+//            }
+//        }
     }
 
     public int dimension() {                // board dimension n
@@ -50,13 +59,14 @@ public class Board {
         int manhattanValue = 0;
         for (int i = 0; i < intialBoardCopy.length; i++) {
             for (int j = 0; j < intialBoardCopy.length; i++) {
-                int goal = 1; // 2
+                int goal = 1;
+                int blockValue = intialBoardCopy[i][j];
 
-                int blockValue = intialBoardCopy[i][j]; // blockValue = 3
+                if (blockValue != goal) {
+                    // Subtract indexes from the correct value and take the abs of that value.
 
-                if (blockValue != goal) { // 3 != 2
-                    manhattanValue += Math.abs(blockValue - goal); // 3 - 2
                 }
+                goal++;
             }
         }
         return manhattanValue;
