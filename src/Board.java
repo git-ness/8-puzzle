@@ -23,13 +23,19 @@ public class Board {
         }
 
         int correctValues = 1;
-        this.indexOfCorrectBoard = new ArrayList<>();
+        this.indexOfCorrectBoard = new ArrayList<>(1);
+        if (this.indexOfCorrectBoard.size() == 0) {this.indexOfCorrectBoard.add(new IndexOfValues(-1,0,0));}
         for (int e = 0; e < blocks.length; e++) {
             for (int f = 0; f < blocks.length; f++) {
                 correctBoard[e][f] = correctValues;
-                indexOfCorrectValues(correctValues, e, f);
+                if (correctValues != blocks.length * blocks.length) {
+                    indexOfCorrectValues(correctValues, e, f);
+                    correctValues++;
+                }
+                else {
+                    indexOfCorrectValues(0, e, f);
+                }
 
-                correctValues++;
             }
         }
         // Sets the last value to be the "blank" space, where 0 is used.
@@ -38,7 +44,7 @@ public class Board {
 
     private void indexOfCorrectValues(int correctValues, int e, int f) {
         IndexOfValues indexOfValues = new IndexOfValues(correctValues, e, f);
-        this.indexOfCorrectBoard.add(indexOfValues);
+        this.indexOfCorrectBoard.add(indexOfCorrectBoard.size(), indexOfValues);
     }
 
     public int dimension() {                // board dimension n
@@ -68,17 +74,8 @@ public class Board {
         int manhattanValue = 0;
         int goal = 1;
 
-        int iCorrectIndex = 0;
-        int jCorrectIndex = 0;
         int iDifference;
         int jDifference;
-
-        IndexOfValues index = indexOfCorrectBoard.get(4);
-        int iIndex = index.getiIndex();
-        int jIndex = index.getjIndex();
-
-        System.out.println("iIndex = " + iIndex + " jIndex = " + jIndex);
-
 
         for (int i = 0; i < initialBoardCopy.length; i++) {
             for (int j = 0; j < initialBoardCopy.length; j++) {
@@ -86,33 +83,21 @@ public class Board {
                 // Grab the i and j location of the correct value to
                 // find the absolute difference for the Manhattan distance.
 
-                if (iCorrectIndex == initialBoardCopy.length) {
-                    iCorrectIndex = 0;
-                }
-
-                if (jCorrectIndex == initialBoardCopy.length) {
-                    jCorrectIndex = 0;
-                }
-
                 int blockValue = initialBoardCopy[i][j];
 
                 if (blockValue != goal && initialBoardCopy[i][j] != 0) {
                     // To find the Manhattan distance, subtract indexes
                     // from the correct i and j location values and take the abs of that value
-                    iDifference = Math.abs(iCorrectIndex);
-                    jDifference = Math.abs(jCorrectIndex);
+                    iDifference = Math.abs(indexOfCorrectBoard.get(blockValue).getiIndex() - i);
+                    jDifference = Math.abs(indexOfCorrectBoard.get(blockValue).getjIndex() - j);
 
                     manhattanValue += iDifference;
                     manhattanValue += jDifference;
                 }
-
                 goal++;
-                iCorrectIndex++;
-
             }
-            jCorrectIndex++;
         }
-        return 0;
+        return manhattanValue;
     }
 
     private class IndexOfValues {
@@ -126,7 +111,7 @@ public class Board {
             this.jIndex = jIndex;
         }
 
-        public int getIndexOfValue(int actualValue) {
+        public int getIndexOfValue() {
             return actualValue;
         }
 
@@ -214,9 +199,10 @@ public class Board {
 
         int[][] realBoardComplete = {
 
-                {1, 2, 7},
-                {4, 0, 6},
-                {3, 8, 5}}; // If it's 0 or doesn't match the goal, add the index to the arrayList.
+                {6, 0, 5},  // 3+2
+                {7, 2, 8},  // 1+1+2
+                {4, 1, 3}}; // 1+3+2
+
 
         Board boardExample = new Board(realBoardComplete);
         System.out.println(boardExample.manhattan());
