@@ -1,5 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 
 public class Board {
 
@@ -24,15 +23,16 @@ public class Board {
 
         int correctValues = 1;
         this.indexOfCorrectBoard = new ArrayList<>(1);
-        if (this.indexOfCorrectBoard.size() == 0) {this.indexOfCorrectBoard.add(new IndexOfValues(-1,0,0));}
+        if (this.indexOfCorrectBoard.size() == 0) {
+            this.indexOfCorrectBoard.add(new IndexOfValues(-1, 0, 0));
+        }
         for (int e = 0; e < blocks.length; e++) {
             for (int f = 0; f < blocks.length; f++) {
                 correctBoard[e][f] = correctValues;
                 if (correctValues != blocks.length * blocks.length) {
                     indexOfCorrectValues(correctValues, e, f);
                     correctValues++;
-                }
-                else {
+                } else {
                     indexOfCorrectValues(0, e, f);
                 }
 
@@ -170,13 +170,104 @@ public class Board {
     }
 
     public Iterable<Board> neighbors() {    // all neighboring boards
+        int blankCol = -1;
+        int blankRow = -1;
 
-        ArrayList<Board> listOfBoards = new ArrayList<>();
-        listOfBoards.add(new Board(initialBoardCopy));
+        ArrayList<Board> neighborListOfBoards = new ArrayList<>();
+        int[][] neighborCopy = new int[initialBoardCopy.length][initialBoardCopy.length];
 
-//        if ()
+        // Move blank space left
+        if (blankCol != 0) {
 
-        return null;
+            int blankRowPosition = -1;
+            int blankColPosition = -1;
+
+            for (int i = 0; i < neighborCopy.length; i++) {
+                for (int j = 0; j < neighborCopy.length; j++) {
+                    if (neighborCopy[i][j] == 0) {
+                        blankRowPosition = i;
+                        blankColPosition = j;
+
+                        neighborCopy[i][j] = initialBoardCopy[i][j];
+                    }
+                }
+            }
+
+            int tempValue = neighborCopy[blankRowPosition][blankColPosition - 1];
+            neighborCopy[blankRowPosition][blankColPosition] = tempValue;
+            neighborCopy[blankRowPosition][blankColPosition - 1] = 0;
+
+            neighborListOfBoards.add(new Board(neighborCopy));
+
+        }
+
+        // Move blank space right
+        if (blankCol != neighborCopy.length - 1) {
+            int blankRowPosition = -1;
+            int blankColPosition = -1;
+
+            for (int i = 0; i < neighborCopy.length; i++) {
+                for (int j = 0; j < neighborCopy.length; j++) {
+                    if (neighborCopy[i][j] == 0) {
+                        blankRowPosition = i;
+                        blankColPosition = j;
+
+                        neighborCopy[i][j] = initialBoardCopy[i][j];
+                    }
+                }
+            }
+            int tempValue = neighborCopy[blankRowPosition][blankColPosition + 1];
+            neighborCopy[blankRowPosition][blankColPosition] = tempValue;
+            neighborCopy[blankRowPosition][blankColPosition + 1] = 0;
+
+            neighborListOfBoards.add(new Board(neighborCopy));
+        }
+
+        // Move blank space up
+        if (blankRow != 0) {
+            int blankRowPosition = -1;
+            int blankColPosition = -1;
+
+            for (int i = 0; i < neighborCopy.length; i++) {
+                for (int j = 0; j < neighborCopy.length; j++) {
+                    if (neighborCopy[i][j] == 0) {
+                        blankRowPosition = i;
+                        blankColPosition = j;
+
+                        neighborCopy[i][j] = initialBoardCopy[i][j];
+
+                    }
+                }
+            }
+
+            int tempValue = neighborCopy[blankRowPosition - 1][blankColPosition];
+            neighborCopy[blankRowPosition][blankColPosition] = tempValue;
+            neighborCopy[blankColPosition - 1][blankColPosition] = 0;
+
+            neighborListOfBoards.add(new Board(neighborCopy));
+        }
+
+        // Move blank space down
+        if (blankRow != neighborCopy.length - 1) {
+            int blankRowPosition = -1;
+            int blankColPosition = -1;
+
+            for (int i = 0; i < neighborCopy.length; i++) {
+                for (int j = 0; j < neighborCopy.length; j++) {
+                    blankRowPosition = i;
+                    blankColPosition = j;
+
+                    neighborCopy[i][j] = initialBoardCopy[i][j];
+                }
+            }
+
+            int tempValue = neighborCopy[blankRowPosition + 1][blankColPosition];
+            neighborCopy[blankRowPosition][blankColPosition] = tempValue;
+            neighborCopy[blankRowPosition][blankColPosition] = 0;
+
+            neighborListOfBoards.add(new Board(neighborCopy));
+        }
+        return neighborListOfBoards;
     }
 
     public String toString() {
